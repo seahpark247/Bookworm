@@ -31,10 +31,15 @@ struct DetailView: View {
                     .offset(x: -5, y: -5)
             }
             
-            Text(book.author)
-                .font(.title)
-                .foregroundStyle(.secondary)
-            
+            HStack {
+                Text(book.author)
+                    .font(.title)
+                Spacer()
+                Text(book.formattedDate)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }.padding(.horizontal)
+                
             Text(book.review)
                 .padding()
             

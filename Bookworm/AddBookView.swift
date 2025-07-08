@@ -13,9 +13,10 @@ struct AddBookView: View {
     
     @State private var title: String = ""
     @State private var author: String = ""
-    @State private var rating = 3
+    @State private var rating = 5
     @State private var genre = "Fantasy"
     @State private var review = ""
+    @State private var showingAlert = false
     
     let genres = ["Fantasy", "Horror", "Kids", "Mystery", "Poetry", "Romance", "Thriller"]
     
@@ -40,6 +41,11 @@ struct AddBookView: View {
                 
                 Section {
                     Button("Save") {
+                        guard isInputValid() else {
+                            showingAlert = true
+                            return
+                        }
+                        
                         let newBook = Book(title: title, author: author, genre: genre, review: review, rating: rating)
                         modelContext.insert(newBook)
                         dismiss()
@@ -47,7 +53,14 @@ struct AddBookView: View {
                 }
             }
             .navigationTitle("Add Book")
+            .alert("Fill up all fields", isPresented: $showingAlert) {
+                Button("Confirm", role: .cancel) {}
+            }
         }
+    }
+    
+    private func isInputValid() -> Bool {
+        return !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !author.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !review.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
 
